@@ -74,14 +74,6 @@ app.use('/api/users', usersRouter)
 // app.use('/api/hunts/:hunt_id/photos', photosRouter)
 app.use('/api/hunts', huntsRouter)
 
-app.get('/testdata', (req, res, next) => {
-  console.log('TEST DATA :')
-  pool.query('Select * from test').then(testData => {
-    console.log(testData)
-    res.send(testData.rows)
-  })
-})
-
 // Require the Routes API
 // Create a Server and run it on the port 3000
 const server = app.listen(3000, function () {
