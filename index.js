@@ -2,6 +2,10 @@
 
 const express = require('express')
 const passport = require('passport')
+const bodyParser = require('body-parser')
+const dbConfig = require('./dbConfig')
+const authRouter = require('./routes/auth')
+const usersRouter = require('./routes/users')
 
 /* Creates an Express application.
 The express() function is a top-level
@@ -11,21 +15,14 @@ const app = express()
 const Pool = require('pg').Pool
 require('./passportConfig')(passport)
 
-const pool = new Pool({
-  user: 'greg',
-  host: 'localhost',
-  database: 'porschehunter',
-  password: 'postgres',
-  dialect: 'postgres',
-  port: 5432,
-})
+const pool = new Pool(dbConfig)
 
 /* To handle the HTTP Methods Body Parser
 is used, Generally used to extract the
 entire body portion of an incoming
 request stream and exposes it on req.body
 */
-const bodyParser = require('body-parser')
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.json())
@@ -44,6 +41,9 @@ pool.connect((err, client, release) => {
   })
 })
 
+app.use('/api/auth', authRouter)
+app.use('/api/users', usersRouter)
+
 app.get('/testdata', (req, res, next) => {
   console.log('TEST DATA :')
   pool.query('Select * from test').then(testData => {
@@ -51,24 +51,6 @@ app.get('/testdata', (req, res, next) => {
     res.send(testData.rows)
   })
 })
-
-app.post(
-  '/auth/signup',
-  passport.authenticate('local-signup', { session: false }),
-  (req, res, next) => {
-    res.json({
-      user: req.user,
-    })
-  },
-)
-
-app.post(
-  '/auth/login',
-  passport.authenticate('local-login', { session: false }),
-  (req, res, next) => {
-    res.json({ user: req.user })
-  },
-)
 
 // Require the Routes API
 // Create a Server and run it on the port 3000

@@ -8,13 +8,19 @@ const emailExists = async email => {
   return data.rows[0]
 }
 
-const createUser = async (email, password) => {
+const usernameValid = async username => {
+  const data = await client.query('SELECT * FROM users WHERE username=$1', [username])
+
+  return data.rowCount === 0
+}
+
+const createUser = async (email, password, username = null) => {
   const salt = await bcrypt.genSalt(10)
   const hash = await bcrypt.hash(password, salt)
 
   const data = await client.query(
-    'INSERT INTO users(email, password) VALUES ($1, $2) RETURNING id, email, password',
-    [email, hash],
+    'INSERT INTO users(email, password, username) VALUES ($1, $2, $3) RETURNING id, email, username',
+    [email, hash, username],
   )
 
   if (data.rowCount == 0) return false
@@ -26,4 +32,4 @@ const matchPassword = async (password, hashPassword) => {
   return match
 }
 
-module.exports = { emailExists, createUser, matchPassword }
+module.exports = { emailExists, usernameValid, createUser, matchPassword }
