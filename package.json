@@ -1,0 +1,20 @@
+{
+  "name": "porschehunter-backend",
+  "version": "1.0.0",
+  "description": "Simple backend using Node, Express, and PostgreSQL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4"
+  }
+}
