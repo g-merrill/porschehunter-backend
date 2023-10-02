@@ -2,7 +2,7 @@ const express = require('express')
 const bcrypt = require('bcryptjs')
 const router = express.Router()
 const db = require('../db')
-const { usernameValid } = require('../helper')
+const { usernameValid, sessionsHasUser } = require('../helper')
 
 // /* GET users homepage. */
 // router.get('/', usersCtrl.index)
@@ -16,6 +16,9 @@ const { usernameValid } = require('../helper')
 router.get(
   '/',
   async (req, res, next) => {
+    if (!sessionsHasUser(req))
+      return res.status(401).send({ message: 'User not logged in' })
+
     const data = await db.query('SELECT * FROM users')
     res.status(200).send({ count: data.rowCount, data: data.rows })
   },
@@ -23,6 +26,9 @@ router.get(
 
 /* GET user */
 router.get('/:user_id', async (req, res, next) => {
+  if (!sessionsHasUser(req))
+    return res.status(401).send({ message: 'User not logged in' })
+
   const { user_id } = req.params
   const data = await db.query('SELECT * FROM users WHERE id = $1', [user_id])
   if (data.rowCount == 0)
@@ -34,6 +40,9 @@ router.get('/:user_id', async (req, res, next) => {
 
 /* PATCH user */
 router.patch('/:user_id', async (req, res, next) => {
+  if (!sessionsHasUser(req))
+    return res.status(401).send({ message: 'User not logged in' })
+
   const { user_id } = req.params
   const { password, username } = req.body
   let data = {}
@@ -64,6 +73,9 @@ router.patch('/:user_id', async (req, res, next) => {
 
 /* DELETE user */
 router.delete('/:user_id', async (req, res, next) => {
+  if (!sessionsHasUser(req))
+    return res.status(401).send({ message: 'User not logged in' })
+
   const { user_id } = req.params
   const data = await db.query(
     'DELETE FROM users WHERE id = $1 RETURNING id, email, username',

@@ -7,7 +7,7 @@ const router = express.Router()
 /* POST signup user. */
 router.post(
   '/signup',
-  passport.authenticate('local-signup', { session: false }),
+  passport.authenticate('local-signup', { session: true }),
   (req, res, next) => {
     res.json({
       user: req.user,
@@ -18,7 +18,7 @@ router.post(
 /* POST signup user. */
 router.post(
   '/login',
-  passport.authenticate('local-login', { session: false }),
+  passport.authenticate('local-login', { session: true }),
   (req, res, next) => {
     res.json({ user: req.user })
   },

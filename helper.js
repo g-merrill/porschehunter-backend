@@ -32,4 +32,23 @@ const matchPassword = async (password, hashPassword) => {
   return match
 }
 
-module.exports = { emailExists, usernameValid, createUser, matchPassword }
+const sessionsHasUser = req => {
+  const { user_id } = req.query
+  const rawSessions = req.sessionStore.sessions
+  const unparsedSessions = Object.values(rawSessions)
+  if (unparsedSessions.length) {
+    return unparsedSessions.some(unparsedSession => {
+      return JSON.parse(unparsedSession).passport.user.id === parseInt(user_id)
+    })
+  } else {
+    return false
+  }
+}
+
+module.exports = {
+  emailExists,
+  usernameValid,
+  createUser,
+  matchPassword,
+  sessionsHasUser,
+}
