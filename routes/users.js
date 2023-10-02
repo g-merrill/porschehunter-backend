@@ -4,14 +4,6 @@ const router = express.Router()
 const db = require('../db')
 const { usernameValid, sessionsHasUser } = require('../helper')
 
-// /* GET users homepage. */
-// router.get('/', usersCtrl.index)
-// router.get('/new', usersCtrl.new)
-// router.get('/:truckid', usersCtrl.show)
-// router.post('/', usersCtrl.create)
-// router.patch('/:truckid', usersCtrl.edit)
-// router.delete('/:truckid', usersCtrl.delete)
-
 /* GET users */
 router.get(
   '/',
