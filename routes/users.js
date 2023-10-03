@@ -4,6 +4,24 @@ const router = express.Router()
 const db = require('../db')
 const { usernameValid, sessionsHasUser } = require('../helper')
 
+router.get('/check-valid-email', async (req, res, next) => {
+  const { email } = req.query
+  const data = await db.query('SELECT * FROM users WHERE email = $1', [email])
+  if (data.rowCount !== 0)
+    return res.status(404).send({ isValidEmail: false })
+
+  res.status(200).send({ isValidEmail: true })
+})
+
+router.get('/check-valid-username', async (req, res, next) => {
+  const { username } = req.query
+  const data = await db.query('SELECT * FROM users WHERE username = $1', [username])
+  if (data.rowCount !== 0)
+    return res.status(404).send({ isValidUsername: false })
+
+  res.status(200).send({ isValidUsername: true })
+})
+
 /* GET users */
 router.get(
   '/',

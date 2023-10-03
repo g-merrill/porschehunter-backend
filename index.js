@@ -8,7 +8,7 @@ const dbConfig = require('./dbConfig')
 const authRouter = require('./routes/auth')
 const usersRouter = require('./routes/users')
 const huntsRouter = require('./routes/hunts')
-// const photosRouter = require('./routes/photos')
+const photosRouter = require('./routes/photos')
 
 /* Creates an Express application.
 The express() function is a top-level
@@ -71,8 +71,8 @@ pool.connect((err, client, release) => {
 
 app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
-// app.use('/api/hunts/:hunt_id/photos', photosRouter)
 app.use('/api/hunts', huntsRouter)
+app.use('/api/hunts', photosRouter)
 
 // Require the Routes API
 // Create a Server and run it on the port 3000
