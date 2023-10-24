@@ -26,11 +26,18 @@ router.get('/check-valid-username', async (req, res, next) => {
 router.get(
   '/',
   async (req, res, next) => {
-    if (!sessionsHasUser(req))
-      return res.status(401).send({ message: 'User not logged in' })
-
-    const data = await db.query('SELECT * FROM users')
-    res.status(200).send({ count: data.rowCount, data: data.rows })
+    const { username } = req.query
+    if (username) {
+      // check if user with given username exists
+      // if so, do auth login logic with the user's email
+      // if not, give 401 unauthorized
+    } else {
+      if (!sessionsHasUser(req))
+        return res.status(401).send({ message: 'User not logged in' })
+  
+      const data = await db.query('SELECT * FROM users')
+      res.status(200).send({ count: data.rowCount, data: data.rows })
+    }
   },
 )
 

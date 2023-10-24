@@ -15,7 +15,7 @@ router.post(
   },
 )
 
-/* POST signup user. */
+/* POST login user. */
 router.post(
   '/login',
   passport.authenticate('local-login', { session: true }),
